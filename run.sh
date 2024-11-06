@@ -1,1 +1,1 @@
-qemu-system-amd64 -hda disk.img -enable-kvm -cpu host -m 1G
+qemu-system-x86_64 -hda disk.img -m 1G
