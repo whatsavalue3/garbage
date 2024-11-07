@@ -3,14 +3,14 @@ ENTRY(main)
 
 MEMORY
 {
-    MBR(rwx) : ORIGIN = 0x7c00, LENGTH = 512
+    BOOT(rwx) : ORIGIN = 0x1000, LENGTH = 4096
 }
 
 SECTIONS
 {
     .text : {
-        . = ORIGIN(MBR);
+        . = ORIGIN(BOOT);
 		KEEP(*(.main))
         KEEP(*(.text*))
-    } > MBR
+    } > BOOT
 }

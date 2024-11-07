@@ -1,7 +1,7 @@
 DISKIMG = bin/disk.img
 MEMORY = 1G
 ARGS = -hda $(DISKIMG) -enable-kvm -cpu host -m $(MEMORY) 
-GCCOPTIONS = -fno-pie -m16 --freestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -fno-builtin -nostdlib -nostartfiles -nodefaultlibs
+GCCOPTIONS = -fno-pie -m32 --freestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -fno-builtin -nostdlib -nostartfiles -nodefaultlibs
 
 
 sourceList = $(subst src/,,$(wildcard src/*.c))
@@ -24,10 +24,11 @@ out: $(includeList) $(sourceList)
 compile: ensurebin out
 
 createimage:
+	nasm bootsect.s
 	dd if=/dev/zero of=$(DISKIMG) bs=1024 count=2048
 	dd if=mbr of=$(DISKIMG) conv=notrunc
-	#dd if=bin/bootsect of=$(DISKIMG) conv=notrunc
-	dd if=bin/compiled.bin of=$(DISKIMG) conv=notrunc
+	dd if=bootsect of=$(DISKIMG) conv=notrunc
+	dd if=bin/compiled.bin of=$(DISKIMG) conv=notrunc bs=512 seek=1
 
 run:
 	qemu-system-amd64 $(ARGS) || qemu-system-x86_64 $(ARGS)
