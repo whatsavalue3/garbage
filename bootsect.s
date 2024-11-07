@@ -1,0 +1,8 @@
+MOV AH, 0xA
+MOV AL,'G'
+MOV CX, 1
+MOV BL, 2
+INT 0x10
+
+halt:
+JMP halt
