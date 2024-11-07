@@ -10,6 +10,7 @@ SECTIONS
 {
     .text : {
         . = ORIGIN(MBR);
+		KEEP(*(.main))
         KEEP(*(.text*))
     } > MBR
 }
