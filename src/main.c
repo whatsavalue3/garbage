@@ -1,11 +1,15 @@
-void main() {
+#include "base.h"
+
+void RAWCODE main() {
 	__asm__(
-		"MOV %AH, 0xA\n"
-		"MOV %AL, 'K'\n"
-		"MOV %CH, 1\n"
-		"MOV %BL, 2\n"
+		"MOV 0xA, %%AH\n"
+		"MOV 'K', %%AL\n"
+		"MOV 1, %%CX\n"
+		"MOV 2, %%BL\n"
 		"INT $0x10\n"
 		"halt:\n"
 		"JMP halt\n"
+		:
+		:
 	);
 }

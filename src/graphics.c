@@ -2,11 +2,12 @@
 
 void Graphics_SetMode(char mode)
 {
-	__asm__(
-		"MOV %AH, 0\n\t"
-		"MOV %AL, %0\n\t"
+	__asm__ (
+		"MOV 0, %%AH\n\t"
+		"MOV %0, %%AL\n\t"
 		"INT $0x10\n\t"
-		: "" : "r" (mode)
+		:
+		: "r" (mode)
 	);
 }
 

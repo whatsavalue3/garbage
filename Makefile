@@ -1,9 +1,11 @@
-DISKIMG := bin/disk.img
-MEMORY := 1G
-ARGS := -hda $(DISKIMG) -enable-kvm -cpu host -m $(MEMORY) 
+DISKIMG = bin/disk.img
+MEMORY = 1G
+ARGS = -hda $(DISKIMG) -enable-kvm -cpu host -m $(MEMORY) 
+GCCOPTIONS = -fno-pie -m32 --freestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -fno-builtin -nostdlib -nostartfiles -nodefaultlibs
+
 
 sourceList = $(subst src/,,$(wildcard src/*.c))
-includeList = $(subst src/,,$(wildcard src/*.h))
+includeList = $(wildcard src/*.h)
 
 all: ensurebin compile createimage run
 
@@ -12,12 +14,12 @@ ensurebin:
 
 define compileSource
   $1: src/$1
-	gcc -c src/$1 -o bin/$1.o -nostdlib -nostartfiles
+	gcc -c src/$1 -o bin/$1.o $(GCCOPTIONS)
 endef
 
 $(foreach file, $(sourceList), $(eval $(call compileSource,$(file))))
 out: $(includeList) $(sourceList)
-	gcc -T linker.ld $(foreach file, $(sourceList), bin/$(file).o) -o bin/compiled.bin -nostdlib -nostartfiles
+	gcc -T linker.ld $(foreach file, $(sourceList), bin/$(file).o) -o bin/compiled.bin $(GCCOPTIONS)
 
 compile: ensurebin out
 
